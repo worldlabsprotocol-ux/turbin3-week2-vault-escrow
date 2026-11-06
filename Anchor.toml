@@ -1,0 +1,19 @@
+[toolchain]
+anchor_version = "0.32.1"
+package_manager = "npm"
+
+[features]
+resolution = true
+skip-lint = false
+
+[programs.localnet]
+vault = "BctY8rmqHk5f6MJDZYmmZ78hXaqaqXMBHvr3Y52v8zK5"
+escrow = "HSyiRChzuxHGmg29Ezsvxyxj6tcR7wLrUySNn9NAJ1gy"
+
+[provider]
+cluster = "Localnet"
+wallet = "~/.config/solana/id.json"
+
+[scripts]
+test = "cargo test --workspace"
+

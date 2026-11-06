@@ -1,0 +1,25 @@
+name: Week 2 Vault and Escrow
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-24.04
+    container: solanafoundation/anchor:v0.32.1
+    steps:
+      - uses: actions/checkout@v4
+      - name: Toolchain versions
+        run: |
+          rustc --version
+          cargo --version
+          anchor --version
+          solana --version
+      - name: Build SBF programs
+        run: anchor build
+      - name: Run LiteSVM suite
+        run: cargo test --workspace --all-targets -- --nocapture
+      - name: Record artifact hashes
+        run: sha256sum target/deploy/vault.so target/deploy/escrow.so
+
