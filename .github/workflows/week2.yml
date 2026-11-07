@@ -10,6 +10,10 @@ jobs:
     container: solanafoundation/anchor:v0.32.1
     steps:
       - uses: actions/checkout@v4
+      - name: Select pinned Rust toolchain
+        run: |
+          rustup toolchain install 1.85.0 --profile minimal
+          rustup default 1.85.0
       - name: Toolchain versions
         run: |
           rustc --version
