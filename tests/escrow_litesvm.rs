@@ -295,3 +295,30 @@ fn timed_offer_rejects_early_refund_then_refunds_after_expiry() {
         2_000_000_000
     );
 }
+
+#[test]
+fn clock_boundary_allows_take_and_rejects_expiry_refund() {
+    let mut f = fixture();
+    let offer_id = 10;
+    let mut clock = f.svm.get_sysvar::<Clock>();
+    let expires_at = clock.unix_timestamp + 30;
+    let ix = make_ix(&f, offer_id, Some(f.taker.pubkey()), expires_at);
+    send(&mut f.svm, &f.maker, &[&f.maker], ix).unwrap();
+    let (offer_key, _) = offer(&f, offer_id);
+
+    clock.unix_timestamp = expires_at;
+    f.svm.set_sysvar(&clock);
+
+    let boundary_refund = expire_refund_ix(&f, offer_id);
+    assert!(send(&mut f.svm, &f.outsider, &[&f.outsider], boundary_refund,).is_err());
+
+    let boundary_take = take_ix(&f, offer_id, f.taker.pubkey());
+    send(&mut f.svm, &f.taker, &[&f.taker], boundary_take).unwrap();
+    assert!(f.svm.get_account(&offer_key).is_none());
+    assert_eq!(
+        litesvm_token::get_spl_account::<spl_token::state::Account>(&f.svm, &f.taker_offered)
+            .unwrap()
+            .amount,
+        1_000_000_000
+    );
+}

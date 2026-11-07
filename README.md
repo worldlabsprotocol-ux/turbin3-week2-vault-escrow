@@ -39,7 +39,7 @@ The timed extension does not make Abraxas a custodian. In a future RWA integrati
 The Rust integration suite loads the compiled SBF artifacts into LiteSVM. It covers:
 
 - vault initialize, deposit, partial/full withdrawal, close, wrong-owner rejection, and overdraw rejection;
-- escrow make, update, designated-taker rejection, successful atomic take, token balances, maker refund, and account closure.
+- escrow make, update, designated-taker rejection, successful atomic take, token balances, maker refund, account closure, early-refund rejection, post-expiry refund, and exact clock-boundary behavior.
 
 Run in the pinned Anchor/Solana Linux environment:
 
