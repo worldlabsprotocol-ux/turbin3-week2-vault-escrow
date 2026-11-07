@@ -28,5 +28,5 @@ Abraxas can verify whether an action is authorized. A separate escrow can execut
 
 8/ That separation matters for tokenized real estate, private credit, and institutional assets: evidence and authorization can remain portable while settlement stays enforceable onchain.
 
-Repository: [ADD PUBLIC REPOSITORY URL]
+Repository: https://github.com/worldlabsprotocol-ux/turbin3-week2-vault-escrow
 

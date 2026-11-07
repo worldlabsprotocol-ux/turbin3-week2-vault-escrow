@@ -41,14 +41,18 @@ The Rust integration suite loads the compiled SBF artifacts into LiteSVM. It cov
 - vault initialize, deposit, partial/full withdrawal, close, wrong-owner rejection, and overdraw rejection;
 - escrow make, update, designated-taker rejection, successful atomic take, token balances, maker refund, account closure, early-refund rejection, post-expiry refund, and exact clock-boundary behavior.
 
-Run in the pinned Anchor/Solana Linux environment:
+SBF compilation uses Solana platform-tools (Rust 1.84). Host-side LiteSVM tests use Rust 1.89 because the locked Solana test graph requires it.
 
 ```bash
 anchor build
-cargo test --workspace --all-targets -- --nocapture
+cargo +1.89.0 test --workspace --all-targets -- --nocapture
 ```
 
-GitHub Actions uses `solanafoundation/anchor:v0.32.1`, records the toolchain versions, runs the full suite, and prints SHA-256 hashes for both SBF artifacts. A passing CI screenshot should be added to the cohort submission only after the public run succeeds.
+Expected host result: **8 passed, 0 failed** (2 vault LiteSVM tests, 4 escrow LiteSVM tests, 2 program `test_id` checks).
+
+GitHub Actions uses `solanafoundation/anchor:v0.32.1`, builds SBF first, then switches the host compiler to 1.89.0 for LiteSVM, and prints SHA-256 hashes for both SBF artifacts.
+
+Public repository: https://github.com/worldlabsprotocol-ux/turbin3-week2-vault-escrow
 
 ## Repository map
 

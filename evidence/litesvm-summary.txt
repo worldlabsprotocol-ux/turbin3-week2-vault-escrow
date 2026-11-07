@@ -1,0 +1,37 @@
+Running unittests src/lib.rs (target/debug/deps/escrow-110ed20378f601d0)
+
+running 1 test
+test test_id ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests src/lib.rs (target/debug/deps/turbin3_week2_tests-ed12938ff2414966)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/escrow_litesvm.rs (target/debug/deps/escrow_litesvm-6a3d4fbcfcf14957)
+
+running 4 tests
+test maker_can_refund_and_close_offer ... ok
+test clock_boundary_allows_take_and_rejects_expiry_refund ... ok
+test timed_offer_rejects_early_refund_then_refunds_after_expiry ... ok
+test make_update_restricted_take_and_atomic_settlement ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.28s
+
+     Running tests/vault_litesvm.rs (target/debug/deps/vault_litesvm-d6af93f1d898586f)
+
+running 2 tests
+test vault_rejects_wrong_owner_and_overdraw ... ok
+test vault_initialize_deposit_withdraw_and_close ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.16s
+
+     Running unittests src/lib.rs (target/debug/deps/vault-baa17fe8eb459ac8)
+
+running 1 test
+test test_id ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
