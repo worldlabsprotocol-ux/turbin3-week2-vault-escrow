@@ -9,12 +9,12 @@ use solana_sdk::{
     instruction::{AccountMeta, Instruction},
     pubkey::Pubkey,
     signature::{Keypair, Signer},
-    system_program,
     transaction::Transaction,
 };
 use spl_associated_token_account::get_associated_token_address;
 
 const ESCROW_PROGRAM: Pubkey = solana_sdk::pubkey!("HSyiRChzuxHGmg29Ezsvxyxj6tcR7wLrUySNn9NAJ1gy");
+const SYSTEM_PROGRAM_ID: Pubkey = Pubkey::new_from_array([0; 32]);
 
 fn discriminator(name: &str) -> Vec<u8> {
     Sha256::digest(format!("global:{name}")).as_slice()[..8].to_vec()
@@ -41,9 +41,12 @@ fn send(
         signers,
         svm.latest_blockhash(),
     );
-    svm.send_transaction(tx)
+    let result = svm
+        .send_transaction(tx)
         .map(|_| ())
-        .map_err(|error| format!("{error:?}"))
+        .map_err(|error| format!("{error:?}"));
+    svm.expire_blockhash();
+    result
 }
 
 struct Fixture {
@@ -145,7 +148,7 @@ fn make_ix(f: &Fixture, offer_id: u64, designated: Option<Pubkey>, expires_at: i
             AccountMeta::new(vault, false),
             AccountMeta::new_readonly(spl_token::id(), false),
             AccountMeta::new_readonly(spl_associated_token_account::id(), false),
-            AccountMeta::new_readonly(system_program::ID, false),
+            AccountMeta::new_readonly(SYSTEM_PROGRAM_ID, false),
         ],
         data,
     }

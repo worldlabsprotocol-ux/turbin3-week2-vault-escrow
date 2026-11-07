@@ -4,11 +4,11 @@ use solana_sdk::{
     instruction::{AccountMeta, Instruction},
     pubkey::Pubkey,
     signature::{Keypair, Signer},
-    system_program,
     transaction::Transaction,
 };
 
 const VAULT_PROGRAM: Pubkey = solana_sdk::pubkey!("BctY8rmqHk5f6MJDZYmmZ78hXaqaqXMBHvr3Y52v8zK5");
+const SYSTEM_PROGRAM_ID: Pubkey = Pubkey::new_from_array([0; 32]);
 
 fn discriminator(name: &str) -> Vec<u8> {
     Sha256::digest(format!("global:{name}")).as_slice()[..8].to_vec()
@@ -26,9 +26,12 @@ fn send(
         signers,
         svm.latest_blockhash(),
     );
-    svm.send_transaction(tx)
+    let result = svm
+        .send_transaction(tx)
         .map(|_| ())
-        .map_err(|error| format!("{error:?}"))
+        .map_err(|error| format!("{error:?}"));
+    svm.expire_blockhash();
+    result
 }
 
 #[test]
@@ -50,7 +53,7 @@ fn vault_initialize_deposit_withdraw_and_close() {
             accounts: vec![
                 AccountMeta::new(owner.pubkey(), true),
                 AccountMeta::new(vault, false),
-                AccountMeta::new_readonly(system_program::ID, false),
+                AccountMeta::new_readonly(SYSTEM_PROGRAM_ID, false),
             ],
             data: discriminator("initialize"),
         },
@@ -69,7 +72,7 @@ fn vault_initialize_deposit_withdraw_and_close() {
             accounts: vec![
                 AccountMeta::new(owner.pubkey(), true),
                 AccountMeta::new(vault, false),
-                AccountMeta::new_readonly(system_program::ID, false),
+                AccountMeta::new_readonly(SYSTEM_PROGRAM_ID, false),
             ],
             data: deposit_data,
         },
@@ -166,7 +169,7 @@ fn vault_rejects_wrong_owner_and_overdraw() {
             accounts: vec![
                 AccountMeta::new(owner.pubkey(), true),
                 AccountMeta::new(vault, false),
-                AccountMeta::new_readonly(system_program::ID, false),
+                AccountMeta::new_readonly(SYSTEM_PROGRAM_ID, false),
             ],
             data: discriminator("initialize"),
         },
