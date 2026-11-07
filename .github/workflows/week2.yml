@@ -10,6 +10,12 @@ jobs:
     container: solanafoundation/anchor:v0.32.1
     steps:
       - uses: actions/checkout@v4
+      - name: Select host Rust 1.89 for LiteSVM
+        run: |
+          rustup toolchain install 1.89.0 --profile minimal
+          rustup default 1.89.0
+          rustc --version
+          cargo --version
       - name: Toolchain versions
         run: |
           rustc --version
@@ -18,14 +24,7 @@ jobs:
           solana --version
       - name: Build SBF programs
         run: anchor build
-      - name: Select host Rust 1.89 for LiteSVM
-        run: |
-          rustup toolchain install 1.89.0 --profile minimal
-          rustup default 1.89.0
-          rustc --version
-          cargo --version
       - name: Run LiteSVM suite
         run: cargo +1.89.0 test --workspace --all-targets -- --nocapture
       - name: Record artifact hashes
         run: sha256sum target/deploy/vault.so target/deploy/escrow.so
-
